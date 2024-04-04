@@ -1,0 +1,56 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'main'
+    paths:
+      - 'modules/ptn/avdSessionHosts/*.bicep'
+      - 'modules/ptn/avdSessionHosts/**/*.bicep'
+
+env:
+  MODULE_REPO_NAME: 'modules/ptn/avdsessionhosts'
+  MODULE_FILE_PATH: 'modules/ptn/avdSessionHosts/deploy.bicep'
+  MODULE_VERSION_FILE_PATH: 'modules/ptn/avdSessionHosts/version.json'
+  AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+  MODULE_REGISTRY_NAME: 'myRegistry' # Assume this is a secret or defined somewhere
+
+jobs:
+  lint-and-psrule:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint and PSRule Analysis
+        uses: ./.github/actions/lint-psrule
+        with:
+          moduleFilePath: ${{ env.MODULE_FILE_PATH }}
+          azureCredentials: ${{ env.AZURE_CREDENTIALS }}
+          # testFilePath: Optional, include if you have specific PSRule tests to run
+
+  publish-and-update-module:
+    needs: lint-and-psrule
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish Module
+        uses: ./.github/actions/publish
+        with:
+          moduleFilePath: ${{ env.MODULE_FILE_PATH }}
+          versionFilePath: ${{ env.MODULE_VERSION_FILE_PATH }}
+          repoName: ${{ env.MODULE_REPO_NAME }}
+          registryName: ${{ env.MODULE_REGISTRY_NAME }}
+          azureCredentials: ${{ env.AZURE_CREDENTIALS }}
+
+  generate-and-update-docs:
+    needs: publish-and-update-module
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate and Update Documentation
+        uses: ./.github/actions/generate-docs
+        with:
+          moduleFilePath: ${{ env.MODULE_FILE_PATH }}
+          registryName: ${{ env.MODULE_REGISTRY_NAME }}
+          repositoryName: ${{ env.MODULE_REPO_NAME }}
+          azureCredentials: ${{ env.AZURE_CREDENTIALS }}

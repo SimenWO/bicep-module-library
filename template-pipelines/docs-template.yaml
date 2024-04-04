@@ -1,0 +1,60 @@
+name: 'Generate and Update Documentation'
+description: 'Generates documentation and creates a pull request with the updates'
+inputs:
+  moduleFilePath:
+    description: 'Path to the module file'
+    required: true
+  registryName:
+    description: 'Registry name'
+    required: true
+  repositoryName:
+    description: 'Repository name'
+    required: true
+  azureCredentials:
+    description: 'Azure credentials in JSON format'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        az login --service-principal -u ${{ inputs.azureCredentials.clientId }} -p ${{ inputs.azureCredentials.clientSecret }} --tenant ${{ inputs.azureCredentials.tenantId }}
+        pwsh -File ./scripts/generate-markdown.ps1 -bicepFilePath ${{ inputs.moduleFilePath }} -registryName ${{ inputs.registryName }} -repositoryName ${{ inputs.repositoryName }}
+      shell: bash
+      env:
+        AZURE_CREDENTIALS: ${{ inputs.azureCredentials }}
+        
+    # Configure Git
+    - name: Configure Git
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "GitHub Actions"
+    
+    # Create feature branch
+    - name: Create feature branch
+      run: |
+        git checkout -b feature/documentation-update-${{ github.run_id }}
+    
+    # Add the changes to git
+    - name: Add changes
+      run: git add -A
+    
+    # Commit the changes
+    - name: Commit changes
+      run: |
+        git diff-index --quiet HEAD || git commit -m "Automated documentation update"
+    
+    # Push the new feature branch to the remote repository
+    - name: Push feature branch
+      run: |
+        git push -u origin feature/documentation-update-${{ github.run_id }}
+    
+    # Create Pull Request
+    - name: Create Pull Request
+      uses: repo-sync/pull-request@v2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        pr_title: "Automated documentation update"
+        pr_body: "Automatically generated documentation update."
+        pr_branch: "feature/documentation-update-${{ github.run_id }}"
+        pr_base: "main" # or the default branch

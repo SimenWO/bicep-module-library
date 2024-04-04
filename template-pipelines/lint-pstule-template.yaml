@@ -1,0 +1,45 @@
+name: 'Lint and PSRule Analysis'
+description: 'Performs linting and PSRule analysis'
+inputs:
+  moduleFilePath:
+    description: 'Path to the module file'
+    required: true
+  testFilePath:
+    description: 'Path to the test file directory'
+    required: false
+  azureCredentials:
+    description: 'Azure credentials in JSON format'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        az login --service-principal -u ${{ inputs.azureCredentials.clientId }} -p ${{ inputs.azureCredentials.clientSecret }} --tenant ${{ inputs.azureCredentials.tenantId }}
+        az bicep build --file ${{ inputs.moduleFilePath }}
+      shell: bash
+      env:
+        AZURE_CREDENTIALS: ${{ inputs.azureCredentials }}
+    # Check for "tests" folder
+    - name: Check for "tests" folder
+      id: check_tests
+      run: |
+        if [ -d "${{ env.MODULE_FILE_PATH }}/tests" ]; then
+          echo "testsExist=true" >> $GITHUB_ENV
+        else
+          echo "testsExist=false" >> $GITHUB_ENV
+        fi
+    
+    # Install PSRule.Rules.Azure
+    - name: Install PSRule.Rules.Azure
+      if: env.testsExist == 'true'
+      run: |
+        pwsh -Command "Install-Module -Name PSRule.Rules.Azure -Scope CurrentUser -Force"
+      shell: pwsh
+    
+    # Analyze Azure template files with PSRule
+    - name: Analyze Azure template files
+      if: env.testsExist == 'true'
+      run: |
+        pwsh -Command "Invoke-PSRule -Module PSRule.Rules.Azure -InputPath '${{ env.TEST_FILE_PATH }}'"
+      shell: pwsh
