@@ -22,7 +22,7 @@ runs:
       run: |
         $moduleFilePath = "${{ env.MODULE_FILE_PATH }}"
         $moduleDirPath = [System.IO.Path]::GetDirectoryName($moduleFilePath)
-        $testsFilePath = Join-Path $moduleDirPath "tests"
+        $testsFilePath = Join-Path $moduleDirPath -ChildPath "tests"
         $exists = Test-Path $testsFilePath
         echo "testsExist=$exists" >> $GITHUB_ENV
       shell: pwsh
