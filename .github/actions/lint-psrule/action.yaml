@@ -14,18 +14,19 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - run: |
-        az bicep build --file ${{ inputs.moduleFilePath }}
+    - name: Lint bicep template
+      run: az bicep build --file ${{ inputs.moduleFilePath }}
       shell: bash
-    # Check for "tests" folder
-    - name: Check for "tests" folder using PowerShell
+
+    - name: Check for "tests" folder in Bash
       run: |
-        $moduleFilePath = "${{ env.MODULE_FILE_PATH }}"
-        $moduleDirPath = [System.IO.Path]::GetDirectoryName($moduleFilePath)
-        $testsFilePath = Join-Path $moduleDirPath -ChildPath "tests"
-        $exists = Test-Path $testsFilePath
-        echo "testsExist=$exists" >> $GITHUB_ENV
-      shell: pwsh
+        MODULE_DIR_PATH=$(dirname ${{ env.MODULE_FILE_PATH }})
+        if [ -d "${{ github.workspace }}/${MODULE_DIR_PATH}/tests" ]; then
+          echo "testsExist=true" >> $GITHUB_ENV
+        else
+          echo "testsExist=false" >> $GITHUB_ENV
+        fi
+      shell: bash
 
     - name: Run PSRule analysis
       if: env.testsExist == 'true'
