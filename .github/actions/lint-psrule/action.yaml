@@ -16,7 +16,7 @@ runs:
   steps:
     - run: |
         az bicep build --file ${{ inputs.moduleFilePath }}
-    
+      shell: bash
     # Check for "tests" folder
     - name: Check for "tests" folder
       id: check_tests
@@ -26,6 +26,7 @@ runs:
         else
           echo "testsExist=false" >> $GITHUB_ENV
         fi
+      shell: bash
     
     # Install PSRule.Rules.Azure
     - name: Install PSRule.Rules.Azure
