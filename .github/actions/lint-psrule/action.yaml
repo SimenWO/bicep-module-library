@@ -27,17 +27,9 @@ runs:
         echo "testsExist=$exists" >> $GITHUB_ENV
       shell: pwsh
 
-    
-    # Install PSRule.Rules.Azure
-    - name: Install PSRule.Rules.Azure
+    - name: Run PSRule analysis
       if: env.testsExist == 'true'
-      run: |
-        pwsh -Command "Install-Module -Name PSRule.Rules.Azure -Scope CurrentUser -Force"
-      shell: pwsh
-    
-    # Analyze Azure template files with PSRule
-    - name: Analyze Azure template files
-      if: env.testsExist == 'true'
-      run: |
-        pwsh -Command "Invoke-PSRule -Module PSRule.Rules.Azure -InputPath '${{ env.TEST_FILE_PATH }}'"
-      shell: pwsh
+      uses: microsoft/ps-rule@v2.9.0 
+      with:
+        modules: PSRule.Rules.Azure # (2)
+        inputPath: ${{ env.MODULE_FILE_PATH }}

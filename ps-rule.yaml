@@ -1,0 +1,58 @@
+#
+# PSRule Configurations
+#
+
+# Please see the documentation for all configuration options:
+# https://aka.ms/ps-rule/options
+# https://aka.ms/ps-rule-azure/options
+
+
+
+input:
+  pathIgnore:
+    # Exclude all files.
+    - "*"
+    # Only process test files.
+    - "!module/**/*.test.bicep"
+
+
+configuration:
+  # Enable automatic expansion of Azure parameter files.
+  AZURE_PARAMETER_FILE_EXPANSION: false
+
+  # Enable automatic expansion of Azure Bicep source files.
+  AZURE_BICEP_FILE_EXPANSION: true
+
+  # Configures the number of seconds to wait for build Bicep files.
+  AZURE_BICEP_FILE_EXPANSION_TIMEOUT: 10
+
+  # Custom non-sensitive parameters' names
+  AZURE_DEPLOYMENT_NONSENSITIVE_PARAMETER_NAMES:
+    [
+      "sasTokenValidityLength",
+      "passwordlength",
+      "secretname",
+      "secreturl",
+      "secreturi",
+      "secretrotation",
+      "secretinterval",
+      "secretprovider",
+      "secretsprovider",
+      "secretref",
+      "secretid",
+      "disablepassword",
+      "sync*passwords",
+      "tokenname",
+      "ssoClientSecretKeyVaultPath",
+      "ssoSecretType",
+      "tokenValidityLength",
+      "keys",
+      "sshAuthorizedKeys"
+    ]
+
+rule:
+  includeLocal: false
+  exclude:
+    - Azure.VM.AMA
+    - Azure.VM.MigrateAMA
+    - Azure.NSG.LateralTraversal
