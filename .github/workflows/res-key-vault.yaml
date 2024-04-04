@@ -8,6 +8,10 @@ on:
     paths:
       - 'modules/res/keyVault/deploy.bicep' # Trigger only on changes to the specified module path
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
