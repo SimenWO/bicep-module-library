@@ -15,11 +15,8 @@ runs:
   using: 'composite'
   steps:
     - run: |
-        az login --service-principal -u ${{ inputs.azureCredentials.clientId }} -p ${{ inputs.azureCredentials.clientSecret }} --tenant ${{ inputs.azureCredentials.tenantId }}
         az bicep build --file ${{ inputs.moduleFilePath }}
-      shell: bash
-      env:
-        AZURE_CREDENTIALS: ${{ inputs.azureCredentials }}
+    
     # Check for "tests" folder
     - name: Check for "tests" folder
       id: check_tests
