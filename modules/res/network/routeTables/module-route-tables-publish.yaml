@@ -1,0 +1,70 @@
+trigger:
+  branches:
+    include:
+      - feature/*
+      - main
+
+  paths:
+    include:
+      - modules/res/network/routeTables/deploy.bicep  # Trigger only on changes to the specified module path
+
+
+variables:
+- group: VDIVariableGroup
+- name: MODULE_REPO_NAME
+  value: "modules/res/network/routetables"
+- name: MODULE_FILE_PATH
+  value: "modules/res/network/routeTables/deploy.bicep"
+- name: MODULE_VERSION_FILE_PATH
+  value: "modules/res/network/routeTables/version.json"
+- name: MODULE_TEST_FILE_PATH
+  value: "modules/res/network/routeTables/tests/defaults/main.test.bicep"
+
+  
+stages:
+  - stage: CI
+    displayName: "Running tests"
+    condition: or(startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/'), eq(variables['Build.Reason'], 'PullRequest'))
+    jobs:
+      - job: LintAndPSRule
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - template: "../../../../template-pipelines/lint-psrule-template.yaml"
+            parameters:
+              moduleFilePath: $(MODULE_FILE_PATH)
+              testFilePath: $(MODULE_TEST_FILE_PATH)
+              azureServiceConnection: $(AZURESERVICECONNECTION)
+              
+  # Stage for validate (implement in later sprint)
+
+  - stage: Publish
+    displayName: "Publishing and updating module in ACR"
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    jobs:
+      - job: PublishAndUpdate
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - template: "../../../../template-pipelines/publish-template.yaml"
+            parameters:
+              moduleFilePath: $(MODULE_FILE_PATH)
+              versionFilePath: $(MODULE_VERSION_FILE_PATH)
+              repoName: $(MODULE_REPO_NAME)
+              azureServiceConnection: $(AZURESERVICECONNECTION)
+              registryName: $(MODULE_REGISTRY_NAME)
+
+      # Job for generating documentation with PSDocs
+      - job: GenerateDocumentation
+        displayName: 'Generate Documentation'
+        pool:
+          vmImage: "ubuntu-latest"
+        dependsOn: PublishAndUpdate
+        condition: succeeded()
+        steps:
+          - template: "../../../../template-pipelines/docs-template.yaml"
+            parameters:
+              moduleFilePath: $(MODULE_FILE_PATH)
+              registryName: $(MODULE_REGISTRY_NAME)
+              repositoryName: $(MODULE_REPO_NAME)
+              azureServiceConnection: $(AZURESERVICECONNECTION)

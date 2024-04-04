@@ -18,15 +18,15 @@ runs:
         az bicep build --file ${{ inputs.moduleFilePath }}
       shell: bash
     # Check for "tests" folder
-    - name: Check for "tests" folder
-      id: check_tests
+    - name: Check for "tests" folder using PowerShell
       run: |
-        if [ -d "${{ env.MODULE_FILE_PATH }}/tests" ]; then
-          echo "testsExist=true" >> $GITHUB_ENV
-        else
-          echo "testsExist=false" >> $GITHUB_ENV
-        fi
-      shell: bash
+        $moduleFilePath = "${{ env.MODULE_FILE_PATH }}"
+        $moduleDirPath = [System.IO.Path]::GetDirectoryName($moduleFilePath)
+        $testsFilePath = Join-Path $moduleDirPath "tests"
+        $exists = Test-Path $testsFilePath
+        echo "testsExist=$exists" >> $GITHUB_ENV
+      shell: pwsh
+
     
     # Install PSRule.Rules.Azure
     - name: Install PSRule.Rules.Azure
