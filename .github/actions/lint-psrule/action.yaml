@@ -18,6 +18,16 @@ runs:
       run: az bicep build --file ${{ inputs.moduleFilePath }}
       shell: bash
 
+    - name: Check for "tests" folder in Bash
+      run: |
+        MODULE_DIR_PATH=$(dirname ${{ env.MODULE_FILE_PATH }})
+        if [ -d "${{ github.workspace }}/${MODULE_DIR_PATH}/tests" ]; then
+          echo "testsExist=true" >> $GITHUB_ENV
+        else
+          echo "testsExist=false" >> $GITHUB_ENV
+        fi
+      shell: bash
+
     - name: Determine and Use testFilePath in Bash
       run: |
         MODULE_DIR_PATH=$(dirname ${{ env.MODULE_FILE_PATH }})
@@ -28,7 +38,9 @@ runs:
           echo "testsExist=true"
           TEST_FILE_PATH="${{ github.workspace }}/${TESTS_DIR_PATH}"
           echo "TEST_FILE_PATH=$TEST_FILE_PATH" >> $GITHUB_ENV
+          # Use TEST_FILE_PATH for whatever you need here
           echo "Test files path set to: $TEST_FILE_PATH"
+          # For example, list what's inside the tests directory
           ls "$TEST_FILE_PATH"
         else
           echo "testsExist=false"
@@ -42,4 +54,4 @@ runs:
       uses: microsoft/ps-rule@v2.9.0 
       with:
         modules: PSRule.Rules.Azure # (2)
-        inputPath: ${{ env.TEST_FILE_PATH }}
+        inputPath: ${{ env.MODULE_FILE_PATH }}
