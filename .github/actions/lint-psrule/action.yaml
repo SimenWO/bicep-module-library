@@ -28,30 +28,9 @@ runs:
         fi
       shell: bash
 
-    - name: Determine and Use testFilePath in Bash
-      run: |
-        MODULE_DIR_PATH=$(dirname ${{ env.MODULE_FILE_PATH }})
-        TESTS_DIR_PATH="${MODULE_DIR_PATH}/tests"
-        
-        # Check if the tests directory exists and set TEST_FILE_PATH accordingly
-        if [ -d "${{ github.workspace }}/${TESTS_DIR_PATH}" ]; then
-          echo "testsExist=true"
-          TEST_FILE_PATH="${{ github.workspace }}/${TESTS_DIR_PATH}"
-          echo "TEST_FILE_PATH=$TEST_FILE_PATH" >> $GITHUB_ENV
-          # Use TEST_FILE_PATH for whatever you need here
-          echo "Test files path set to: $TEST_FILE_PATH"
-          # For example, list what's inside the tests directory
-          ls "$TEST_FILE_PATH"
-        else
-          echo "testsExist=false"
-          echo "No tests directory found at expected path."
-        fi
-      shell: bash
-
-
     - name: Run PSRule analysis
       if: env.testsExist == 'true'
       uses: microsoft/ps-rule@v2.9.0 
       with:
         modules: PSRule.Rules.Azure # (2)
-        inputPath: ${{ env.MODULE_FILE_PATH }}
+        inputPath: ${{ env.testFilePath }}
