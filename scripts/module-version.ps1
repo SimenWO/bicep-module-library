@@ -43,5 +43,5 @@ else {
 
 Write-Host "New version to publish: $newVersion"
 
-# Output the new version for use in Azure DevOps pipeline variables
-Write-Host "##vso[task.setvariable variable=newVersion]$newVersion"
+# Set the newVersion in GitHub Actions environment variable
+"newVersion=$newVersion" | Out-File -Append -FilePath $env:GITHUB_ENV
