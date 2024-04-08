@@ -10,44 +10,43 @@ inputs:
   repositoryName:
     description: 'Repository name'
     required: true
-  azureCredentials:
-    description: 'Azure credentials in JSON format'
-    required: true
 
 runs:
   using: 'composite'
   steps:
     - run: |
-        az login --service-principal -u ${{ inputs.azureCredentials.clientId }} -p ${{ inputs.azureCredentials.clientSecret }} --tenant ${{ inputs.azureCredentials.tenantId }}
-        pwsh -File ./scripts/generate-markdown.ps1 -bicepFilePath ${{ inputs.moduleFilePath }} -registryName ${{ inputs.registryName }} -repositoryName ${{ inputs.repositoryName }}
-      shell: bash
-      env:
-        AZURE_CREDENTIALS: ${{ inputs.azureCredentials }}
+        ./scripts/generate-markdown.ps1 -bicepFilePath ${{ inputs.moduleFilePath }} -registryName ${{ inputs.registryName }} -repositoryName ${{ inputs.repositoryName }}
+      shell: pwsh
         
     # Configure Git
     - name: Configure Git
       run: |
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "GitHub Actions"
+      shell: bash
     
     # Create feature branch
     - name: Create feature branch
       run: |
         git checkout -b feature/documentation-update-${{ github.run_id }}
+      shell: bash
     
     # Add the changes to git
     - name: Add changes
       run: git add -A
+      shell: bash
     
     # Commit the changes
     - name: Commit changes
       run: |
         git diff-index --quiet HEAD || git commit -m "Automated documentation update"
+      shell: bash
     
     # Push the new feature branch to the remote repository
     - name: Push feature branch
       run: |
         git push -u origin feature/documentation-update-${{ github.run_id }}
+      shell: bash
     
     # Create Pull Request
     - name: Create Pull Request
