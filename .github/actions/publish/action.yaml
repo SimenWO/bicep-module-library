@@ -41,5 +41,5 @@ runs:
     # Publish if the new version is not in ACR
     - name: Publish module
       run: |
-        az bicep publish --target 'br:${{ inputs.registryName }}.azurecr.io/${{ inputs.repoName }}:${{ env.newVersion }}' --file ${{ inputs.moduleFilePath }} --with-source
+        az bicep publish --target 'br:${{ inputs.registryName }}.azurecr.io/${{ inputs.repoName }}:${{ env.newVersion }}' --file ${{ inputs.moduleFilePath }}
       shell: bash
