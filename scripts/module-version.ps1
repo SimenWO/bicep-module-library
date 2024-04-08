@@ -1,6 +1,9 @@
 param (
+    [Parameter(Mandatory = $true)]
     [string]$registryName,
+    [Parameter(Mandatory = $true)]
     [string]$repositoryName,
+    [Parameter(Mandatory = $true)]
     [string]$versionPath
 )
 
@@ -18,8 +21,7 @@ try {
         $latestMinor = $matches[2]
         $latestPatchNumber = [int]$matches[3]
     }
-}
-catch {
+} catch {
     Write-Host "Repository $repositoryName does not exist in $registryName. Assuming new repository."
 }
 
@@ -40,4 +42,4 @@ else {
 }
 
 Write-Host "New version to publish: $newVersion"
-echo "newVersion=$newVersion" | Out-File -Append -FilePath $env:GITHUB_ENV
+Write-Host "newVersion=$newVersion" | Out-File -Append -FilePath $env:GITHUB_ENV

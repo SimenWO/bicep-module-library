@@ -23,24 +23,23 @@ runs:
         pwsh -File ./scripts/module-version.ps1 -registryName ${{ inputs.registryName }} -repositoryName ${{ inputs.repoName }} -versionPath ${{ inputs.versionFilePath }}
       shell: bash
 
-    # Check if the new version already exist in the ACR
-    - name: Check if version exists in ACR
-      id: check_version
-      run: |
-        existingTags=$(az acr repository show-tags --name ${{ inputs.registryName }} --repository ${{ inputs.repoName }} --orderby time_desc --output tsv)
-        echo $existingTags
-        echo "newVersion=${{ inputs.newVersion }}"
-        if echo "$existingTags" | grep -qw "${{ env.newVersion }}"; then
-          echo "exists=true" >> $GITHUB_ENV
-        else
-          echo "exists=false" >> $GITHUB_ENV
-        fi
-      shell: bash
+    # # Check if the new version already exist in the ACR
+    # - name: Check if version exists in ACR
+    #   id: check_version
+    #   run: |
+    #     existingTags=$(az acr repository show-tags --name ${{ inputs.registryName }} --repository ${{ inputs.repoName }} --orderby time_desc --output tsv)
+    #     echo $existingTags
+    #     echo "newVersion=${{ inputs.newVersion }}"
+    #     if echo "$existingTags" | grep -qw "${{ env.newVersion }}"; then
+    #       echo "exists=true" >> $GITHUB_ENV
+    #     else
+    #       echo "exists=false" >> $GITHUB_ENV
+    #     fi
+    #   shell: bash
 
     
     # Publish if the new version is not in ACR
     - name: Publish module
-      if: steps.check_version.outputs.exists == 'false'
       run: |
         az bicep publish --target 'br:${{ inputs.registryName }}.azurecr.io/${{ inputs.repoName }}:${{ env.newVersion }}' --file ${{ inputs.moduleFilePath }} --with-source
       shell: bash
