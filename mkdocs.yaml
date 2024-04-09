@@ -1,0 +1,41 @@
+site_name: Bicep Module Library
+theme:
+  name: material
+  palette: 
+    scheme: bicepdeveloper
+
+    # # Palette toggle for light mode
+    # - scheme: default
+    #   toggle:
+    #     icon: material/brightness-7 
+    #     name: Switch to dark mode
+
+    # # Palette toggle for dark mode
+    # - scheme: slate
+    #   toggle:
+    #     icon: material/brightness-4
+    #     name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.path
+    - search.suggest
+    - navigation.footer
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  generator: true
+  
+
+
+plugins:
+  - search
