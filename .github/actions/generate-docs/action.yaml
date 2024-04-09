@@ -31,6 +31,8 @@ runs:
     # Create feature branch
     - name: Create feature branch
       run: |
+        git checkout main
+        git pull
         git checkout -b feature/documentation-update-${{ github.run_id }}
       shell: bash
     
