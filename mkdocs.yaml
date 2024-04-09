@@ -25,6 +25,8 @@ theme:
 
 nav:
   - HOME: index.md
+  - Resource modules:
+    - Key Vault: res-keyVault.md
 
 markdown_extensions:
   - admonition
