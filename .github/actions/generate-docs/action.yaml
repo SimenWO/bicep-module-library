@@ -60,5 +60,5 @@ runs:
         github_token: ${{ inputs.githubSecret}}
         pr_title: "Automated documentation update"
         pr_body: "Automatically generated documentation update."
-        pr_branch: "feature/documentation-update-${{ github.run_id }}"
-        pr_base: "main" # or the default branch
+        source_branch: "feature/documentation-update-${{ github.run_id }}"
+        destination_branch: "main" 
