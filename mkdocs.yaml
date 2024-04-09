@@ -23,6 +23,9 @@ theme:
     - navigation.footer
     - content.code.copy
 
+nav:
+  - HOME: index.md
+
 markdown_extensions:
   - admonition
   - pymdownx.details
