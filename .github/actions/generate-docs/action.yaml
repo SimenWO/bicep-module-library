@@ -10,6 +10,9 @@ inputs:
   repositoryName:
     description: 'Repository name'
     required: true
+  githubSecret:
+    description: 'Gitbub token'
+    required: true
 
 runs:
   using: 'composite'
@@ -52,7 +55,7 @@ runs:
     - name: Create Pull Request
       uses: repo-sync/pull-request@v2
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ inputs.githubSecret}}
         pr_title: "Automated documentation update"
         pr_body: "Automatically generated documentation update."
         pr_branch: "feature/documentation-update-${{ github.run_id }}"

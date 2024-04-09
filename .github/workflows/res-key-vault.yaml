@@ -11,6 +11,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 
 env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
@@ -77,3 +78,4 @@ jobs:
           moduleFilePath: ${{ env.MODULE_FILE_PATH }}
           registryName: ${{ env.MODULE_REGISTRY_NAME }}
           repositoryName: ${{ env.MODULE_REPO_NAME }}
+          githubSecret: ${{ secrets.GITHUB_TOKEN }}
