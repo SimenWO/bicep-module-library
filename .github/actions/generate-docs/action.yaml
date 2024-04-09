@@ -47,12 +47,14 @@ runs:
         git diff-index --quiet HEAD || git commit -m "Automated documentation update"
       shell: bash
     
-    # Push the new feature branch to the remote repository
+    
     - name: Push feature branch
       run: |
+        git fetch origin main:main
+        git rebase main
         git push -u origin feature/documentation-update-${{ github.run_id }}
       shell: bash
-    
+
     # Create Pull Request
     - name: Create Pull Request
       uses: repo-sync/pull-request@v2
