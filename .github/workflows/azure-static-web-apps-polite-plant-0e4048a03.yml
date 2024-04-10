@@ -4,10 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'docs/*'
+
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+    paths:
+      - 'docs/*'
 
 jobs:
   build_and_deploy_job:
@@ -48,3 +53,4 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_POLITE_PLANT_0E4048A03 }}
           action: "close"
+          app_location: "/site/"
