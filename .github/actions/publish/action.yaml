@@ -23,19 +23,17 @@ runs:
         ./scripts/module-version.ps1 -registryName ${{ inputs.registryName }} -repositoryName ${{ inputs.repoName }} -versionPath ${{ inputs.versionFilePath }}
       shell: pwsh
 
-    # # Check if the new version already exist in the ACR
-    # - name: Check if version exists in ACR
-    #   id: check_version
-    #   run: |
-    #     existingTags=$(az acr repository show-tags --name ${{ inputs.registryName }} --repository ${{ inputs.repoName }} --orderby time_desc --output tsv)
-    #     echo $existingTags
-    #     echo "newVersion=${{ inputs.newVersion }}"
-    #     if echo "$existingTags" | grep -qw "${{ env.newVersion }}"; then
-    #       echo "exists=true" >> $GITHUB_ENV
-    #     else
-    #       echo "exists=false" >> $GITHUB_ENV
-    #     fi
-    #   shell: bash
+    # Fallback for non-existing repositories, if necessary
+    # This step assumes the newVersion has been set by the PowerShell script
+    - name: Set default version if not set
+      run: |
+        if [ -z "${{ env.newVersion }}" ]; then
+          echo "newVersion=0.1.0" >> $GITHUB_ENV
+          echo "Fallback to default version: 0.1.0"
+        else
+          echo "Proceeding with version: ${{ env.newVersion }}"
+        fi
+      shell: bash
 
     
     # Publish if the new version is not in ACR
