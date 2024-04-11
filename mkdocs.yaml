@@ -29,6 +29,8 @@ nav:
     - Key Vault: 
       - Main: res-keyVault.md
       - Secrets: keyVault-secrets.md
+      - Keys: keyVault-keys-md
+      - Access Policy: keyVault-access-policy.md
 
 
 markdown_extensions:
