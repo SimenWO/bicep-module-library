@@ -42,6 +42,6 @@ else {
 }
 
 Write-Host "New version to publish: $newVersion"
-# Write-Output "newVersion=$newVersion" >> $env:GITHUB_ENV
+Write-Output "newVersion=$newVersion" >> $env:GITHUB_ENV
 
 #"newVersion=$newVersion" | Out-File -Append -Encoding utf8 -FilePath $env:GITHUB_ENV
