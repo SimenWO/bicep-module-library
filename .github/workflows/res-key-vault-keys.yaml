@@ -1,4 +1,4 @@
-name: Key Vault Secret Module CI/CD
+name: Key Vault Keys Module CI/CD
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'feature/*'
       - 'main'
     paths:
-      - 'modules/res/keyVault/secrets/deploy.bicep'
+      - 'modules/res/keyVault/keys/deploy.bicep'
 
 permissions:
   id-token: write
@@ -17,9 +17,9 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  MODULE_REPO_NAME: 'modules/res/keyvault/secrets'
-  MODULE_FILE_PATH: 'modules/res/keyVault/secrets/deploy.bicep'
-  MODULE_VERSION_FILE_PATH: 'modules/res/keyVault/secrets/version.json'
+  MODULE_REPO_NAME: 'modules/res/keyvault/keys'
+  MODULE_FILE_PATH: 'modules/res/keyVault/keys/deploy.bicep'
+  MODULE_VERSION_FILE_PATH: 'modules/res/keyVault/keys/version.json'
   MODULE_TEST_FILE_PATH: 'modules/res/keyVault/tests/default/main.test.bicep'
   MODULE_REGISTRY_NAME: 'acromethszrrtlas' 
 

@@ -27,8 +27,8 @@ jobs:
   lint-and-psrule:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: azure/login@v1
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
         name: Sign in to Azure
         with:
           client-id: ${{ env.ARM_CLIENT_ID }}
@@ -45,8 +45,8 @@ jobs:
     if: github.ref == 'refs/heads/main' # Only run on main branch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: azure/login@v1
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
         name: Sign in to Azure
         with:
           client-id: ${{ env.ARM_CLIENT_ID }}
@@ -64,8 +64,8 @@ jobs:
     needs: publish-and-update-module
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: azure/login@v1
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
         name: Sign in to Azure
         with:
           client-id: ${{ env.ARM_CLIENT_ID }}

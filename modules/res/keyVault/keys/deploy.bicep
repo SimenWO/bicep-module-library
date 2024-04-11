@@ -1,6 +1,11 @@
 metadata name = 'Key Vault Keys'
 metadata description = 'This module deploys a Key Vault Key.'
 
+// ================ //
+//    Parameters    // 
+// ================ //
+
+
 @description('Conditional. The name of the parent key vault. Required if the template is used in a standalone deployment.')
 param keyVaultName string
 
