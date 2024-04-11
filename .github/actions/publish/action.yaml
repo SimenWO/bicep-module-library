@@ -19,7 +19,8 @@ runs:
   steps:
     - name: Update/check version on module
       run: |
-        ./scripts/module-version.ps1 -registryName ${{ inputs.registryName }} -repositoryName ${{ inputs.repoName }} -versionPath ${{ inputs.versionFilePath }}
+        $version = "./scripts/module-version.ps1 -registryName ${{ inputs.registryName }} -repositoryName ${{ inputs.repoName }} -versionPath ${{ inputs.versionFilePath }}"
+        echo "newVersion=$newVersion" >> $env:GITHUB_ENV
       shell: pwsh
 
     # Fallback for non-existing repositories, if necessary
