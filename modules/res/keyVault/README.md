@@ -4,7 +4,7 @@ This module deploys a Key Vault.
 
 !!! info "Module reference (latest tag)"
     ```
-    br:acromethszrrtlas.azurecr.io/modules/res/keyvault:0.1.6
+    br:acromethszrrtlas.azurecr.io/modules/res/keyvault:0.1.0
     ```
 
 ## Parameters
