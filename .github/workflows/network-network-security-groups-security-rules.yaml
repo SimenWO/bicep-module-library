@@ -6,7 +6,7 @@ on:
       - 'feature/*'
       - 'main'
     paths:
-      - 'modules/res/keyVault/deploy.bicep' # Trigger only on changes to the specified module path
+      - 'modules/res/network/networkSecurityGroups/securityRules/deploy.bicep' # Trigger only on changes to the specified module path
 
 permissions:
   id-token: write
