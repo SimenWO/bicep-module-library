@@ -1,4 +1,4 @@
-name: Key Vault Module CI/CD
+name: Network - Network security groups - security rules CI/CD
 
 on:
   push:

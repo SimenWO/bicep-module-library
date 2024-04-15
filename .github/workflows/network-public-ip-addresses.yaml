@@ -1,4 +1,4 @@
-name: Key Vault Module CI/CD
+name: Network - Public IP Addresses CI/CD
 
 on:
   push:

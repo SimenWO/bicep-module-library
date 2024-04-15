@@ -1,4 +1,4 @@
-name: Key Vault Module CI/CD
+name: Network - Route Tables CI/CD
 
 on:
   push:
@@ -17,10 +17,10 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  MODULE_REPO_NAME: 'modules/res/network/routeTables'
-  MODULE_FILE_PATH: 'modules/res/network/routetables/deploy.bicep'
-  MODULE_VERSION_FILE_PATH: 'modules/res/network/routetables/version.json'
-  MODULE_TEST_FILE_PATH: 'modules/res/network/routetables/tests/defaults/main.test.bicep'
+  MODULE_REPO_NAME: 'modules/res/network/routetables'
+  MODULE_FILE_PATH: 'modules/res/network/routeTables/deploy.bicep'
+  MODULE_VERSION_FILE_PATH: 'modules/res/network/routeTables/version.json'
+  MODULE_TEST_FILE_PATH: 'modules/res/network/routeTables/tests/defaults/main.test.bicep'
   MODULE_REGISTRY_NAME: 'acromethszrrtlas' 
 
 jobs:

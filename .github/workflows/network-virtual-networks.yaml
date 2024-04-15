@@ -1,4 +1,4 @@
-name: Key Vault Module CI/CD
+name: Network - Virtual Network CI/CD
 
 on:
   push:

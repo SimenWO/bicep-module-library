@@ -1,4 +1,4 @@
-name: Key Vault Module CI/CD
+name: Netwok - Subnets CI/CD
 
 on:
   push:

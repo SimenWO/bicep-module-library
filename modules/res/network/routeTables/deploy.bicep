@@ -1,5 +1,5 @@
 metadata name = 'Route Tables'
-metadata description = 'This module deploys a Route Table.'
+metadata description = 'This module deploys Route Tables.'
 
 
 // ================ //
