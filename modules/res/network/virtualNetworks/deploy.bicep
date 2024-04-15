@@ -1,6 +1,11 @@
 metadata name = 'Virtual Network'
 metadata description = 'This module deploys a Virtual Network.'
 
+
+// ================ //
+//    Parameters    // 
+// ================ //
+
 @description('Required. The Virtual Network (vNet) Name.')
 param name string
 

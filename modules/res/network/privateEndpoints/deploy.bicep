@@ -1,6 +1,11 @@
 metadata name = 'Private Endpoints'
 metadata description = 'This module deploys a Private Endpoint.'
 
+// ================ //
+//    Parameters    // 
+// ================ //
+
+
 @description('Required. Name of the private endpoint resource to create.')
 param name string
 

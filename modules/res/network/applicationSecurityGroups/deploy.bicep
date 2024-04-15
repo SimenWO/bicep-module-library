@@ -1,6 +1,11 @@
 metadata name = 'Application Security Group'
 metadata description = 'This module deploys a Application Security Group.'
 
+// ================ //
+//    Parameters    // 
+// ================ //
+
+
 @description('Required. Name of the Application Security Group.')
 param name string
 

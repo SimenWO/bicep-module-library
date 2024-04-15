@@ -1,0 +1,81 @@
+name: Key Vault Module CI/CD
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'main'
+    paths:
+      - 'modules/res/keyVault/deploy.bicep' # Trigger only on changes to the specified module path
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+env:
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  MODULE_REPO_NAME: 'modules/res/network/virtualnetworkpeerings'
+  MODULE_FILE_PATH: 'modules/res/network/virtualNetworks/virtualNetworkPeerings/deploy.bicep'
+  MODULE_VERSION_FILE_PATH: 'modules/res/network/virtualNetworks/virtualNetworkPeerings/version.json'
+  MODULE_TEST_FILE_PATH: 'modules/res/network/virtualNetworks/virtualNetworkPeerings/tests/defaults/main.test.bicep'
+  MODULE_REGISTRY_NAME: 'acromethszrrtlas' 
+
+jobs:
+  lint-and-psrule:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        name: Sign in to Azure
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+      - name: Lint and PSRule Analysis
+        uses: ./.github/actions/lint-psrule
+        with:
+          moduleFilePath: ${{ env.MODULE_FILE_PATH }}
+          testFilePath: ${{ env.MODULE_TEST_FILE_PATH }}
+
+  publish-and-update-module:
+    needs: lint-and-psrule
+    if: github.ref == 'refs/heads/main' # Only run on main branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        name: Sign in to Azure
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+      - name: Publish Module
+        uses: ./.github/actions/publish
+        with:
+          moduleFilePath: ${{ env.MODULE_FILE_PATH }}
+          versionFilePath: ${{ env.MODULE_VERSION_FILE_PATH }}
+          repoName: ${{ env.MODULE_REPO_NAME }}
+          registryName: ${{ env.MODULE_REGISTRY_NAME }}
+
+  generate-and-update-docs:
+    needs: publish-and-update-module
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        name: Sign in to Azure
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+
+      - name: Generate and Update Documentation
+        uses: ./.github/actions/generate-docs
+        with:
+          moduleFilePath: ${{ env.MODULE_FILE_PATH }}
+          registryName: ${{ env.MODULE_REGISTRY_NAME }}
+          repositoryName: ${{ env.MODULE_REPO_NAME }}
+          githubSecret: ${{ secrets.GITHUB_TOKEN }}

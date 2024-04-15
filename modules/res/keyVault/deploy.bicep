@@ -4,6 +4,7 @@ metadata description = 'This module deploys a Key Vault.'
 // ================ //
 //    Parameters    // 
 // ================ //
+
 @description('Required. Name of the Key Vault. Must be globally unique.')
 @maxLength(24)
 param name string

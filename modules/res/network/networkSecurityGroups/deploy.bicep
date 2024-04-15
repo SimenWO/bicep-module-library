@@ -1,6 +1,11 @@
 metadata name = 'Network Security Group'
 metadata description = 'This module deploys a Network Security Group.'
 
+// ================ //
+//    Parameters    // 
+// ================ //
+
+
 @description('Required. Name of the Network Security Group.')
 param name string
 

@@ -1,6 +1,11 @@
 metadata name = 'Network Interfaces'
 metadata description = 'This module deploys a Network Interface.'
 
+// ================ //
+//    Parameters    // 
+// ================ //
+
+
 @description('Required. The name of the network interface.')
 param name string
 

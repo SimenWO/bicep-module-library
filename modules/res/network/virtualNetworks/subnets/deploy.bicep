@@ -1,6 +1,11 @@
 metadata name = 'Subnets'
 metadata description = 'This module deploys a Subnet.'
 
+// ================ //
+//    Parameters    // 
+// ================ //
+
+
 @description('Optional. The Name of the subnet resource.')
 param name string
 

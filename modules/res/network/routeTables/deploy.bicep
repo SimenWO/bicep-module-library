@@ -1,6 +1,12 @@
 metadata name = 'Route Tables'
 metadata description = 'This module deploys a Route Table.'
 
+
+// ================ //
+//    Parameters    // 
+// ================ //
+
+
 @description('Required. Name given for the hub route table.')
 param name string
 

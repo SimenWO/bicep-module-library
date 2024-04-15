@@ -1,6 +1,11 @@
 metadata name = 'Security Rules'
 metadata description = 'This module deploys a Network Security Group - Security Rule.'
 
+// ================ //
+//    Parameters    // 
+// ================ //
+
+
 @sys.description('Required. The name of the security rule.')
 param name string
 
