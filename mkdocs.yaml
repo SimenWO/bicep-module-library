@@ -2,8 +2,8 @@ site_name: Bicep Module Library
 theme:
   name: material
   palette: 
-    scheme: bicepdeveloper
-
+    primary: black
+    accent: blue
     # # Palette toggle for light mode
     # - scheme: default
     #   toggle:
