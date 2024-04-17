@@ -25,6 +25,8 @@ theme:
 
 nav:
   - HOME: index.md
+  - Pattern modules:
+    - Storage Azure Files: ptn-storageAzureFiles.md
   - Resource modules:
     - Key Vault: 
       - Main: res-keyVault.md
