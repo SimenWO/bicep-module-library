@@ -25,12 +25,28 @@ theme:
 
 nav:
   - HOME: index.md
+  - Pattern modules:
   - Resource modules:
     - Key Vault: 
       - Main: res-keyVault.md
       - Secrets: keyVault-secrets.md
       - Keys: keyVault-keys-md
       - Access Policy: keyVault-access-policy.md
+    - Network:
+        - Application Security Groups: network-applicationSecurityGroups.md
+        - Network Interfaces: network-networkInterfaces.md
+        - Network Security Groups: 
+            - Main: network-networkSecurityGroups.md
+            - Security Rules: networkSecurityGroups-securityRules.md
+        - Private Endpoints: 
+            - Main: network-privateEndpoints.md
+            - Private DNS Zone Groups: privateEndpoints-privateDnsZoneGroups.md
+        - Public IP Addresses: network-publicIPAddresses.md
+        - Route Tables: network-routeTables.md
+        - Virtual Networks:
+            - Main: network-virtualNetworks.md
+            - Virtual Network Peerings: virtualNetworks-virtualNetworkPeerings.md
+            - Subnets: virtualNetworks-subnets.md
 
 
 markdown_extensions:
