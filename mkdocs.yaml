@@ -25,7 +25,6 @@ theme:
 
 nav:
   - HOME: index.md
-  - Pattern modules:
   - Resource modules:
     - Key Vault: 
       - Main: res-keyVault.md
