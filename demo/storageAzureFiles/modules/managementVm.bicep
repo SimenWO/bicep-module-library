@@ -103,19 +103,22 @@ resource avdWrklKeyVaultget 'Microsoft.KeyVault/vaults@2021-06-01-preview' exist
 }
 
 // Provision temporary VM and add it to domain.
-module managementVm 'br/res-modules:compute/virtualmachines:0.1.0' = {
+module managementVm 'br/public:avm/res/compute/virtual-machine:0.2.3' = {
     scope: resourceGroup('${workloadSubsId}', '${serviceObjectsRgName}')
     name: 'MGMT-VM-${time}'
     params: {
         name: managementVmName
         location: location
         timeZone: computeTimeZone
-        systemAssignedIdentity: false
-        userAssignedIdentities: {
-            '${storageManagedIdentityResourceId}': {}
+        managedIdentities: {
+             systemAssigned: false
+             userAssignedResourceIds: [
+                storageManagedIdentityResourceId
+             ]
         }
+
         encryptionAtHost: encryptionAtHost
-        availabilityZone: []
+        availabilityZone: 1
         osType: 'Windows'
         //licenseType: 'Windows_Client'
         vmSize: mgmtVmSize
