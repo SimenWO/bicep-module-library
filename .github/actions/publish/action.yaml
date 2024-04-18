@@ -24,7 +24,6 @@ runs:
       shell: pwsh
 
     # Fallback for non-existing repositories, if necessary
-    # This step assumes the newVersion has been set by the PowerShell script
     - name: Set default version if not set
       run: |
         if [ -z "${{ env.newVersion }}" ]; then
