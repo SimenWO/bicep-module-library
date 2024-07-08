@@ -1,0 +1,95 @@
+name: Deploy Environment - TEMPLATE_PLACEHOLDER
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - "deploy/environment/deploy.bicepparam"
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+env:
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  LOCATION: 'westeurope'
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  DEPLOYMENT_NAME: 'Deploy-environment-${{ github.run_number }}'
+  STORAGE_BICEP_FILE: 'deploy/environment/deploystorage.bicep'
+  STORAGE_BICEP_FILE_PARAM: 'deploy/environment/deploystorage.bicepparam'
+
+jobs:
+#   LintValidate:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4.1.7
+#       - uses: Azure/cli@v2.0.0
+#         with:
+#           inlineScript: |
+#             echo "Linting Bicep file"
+#             az bicep build --file ${{ env.BICEP_FILE }}
+#         env:
+#           AZURE_CORE_COLLECT_TELEMETRY: 'no'
+#       - uses: Azure/cli@v2.0.0
+#         with:
+#           inlineScript: |
+#             echo "Building and What-If Bicep file"
+#             az bicep build --file ${{ env.BICEP_FILE }}
+#             az deployment sub what-if --location ${{ env.LOCATION }} --template-file ${{ env.BICEP_FILE }} --parameters ${{ env.PARAMETER_FILE }}
+#         env:
+#           AZURE_CORE_COLLECT_TELEMETRY: 'no'
+
+  deployAndUpload:
+    # needs: LintValidate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - uses: azure/login@v2.1.1
+        with:
+          client-id: ${{ env.ARM_CLIENT_ID }}
+          tenant-id: ${{ env.ARM_TENANT_ID }}
+          subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+      - uses: Azure/cli@v2.0.0
+        with:
+          inlineScript: |
+            echo "Linting Bicep file"
+            az bicep build --file ${{ env.STORAGE_BICEP_FILE }}
+        env:
+          AZURE_CORE_COLLECT_TELEMETRY: 'no'
+      - name: Deploy Prerequisite Resources
+        id: deploy
+        uses: azure/arm-deploy@v2
+        with:
+          scope: subscription
+          region: ${{ env.LOCATION }}
+          subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
+          template: ${{ env.STORAGE_BICEP_FILE }}
+          parameters: ${{ env.STORAGE_BICEP_FILE_PARAM }}
+
+      - name: Upload files to Storage Account
+        run: |
+          for file in $(ls modules/scripts/*); do
+            az storage blob upload --account-name ${{ steps.deploy.outputs.storageAccountName }} --container-name ${{ steps.deploy.outputs.containerName }} --file "$file" --name "$(basename $file)"
+          done
+
+#   deploy:
+#     needs: deployAndUpload
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4.1.7
+#       - uses: azure/login@v2.1.1
+#         with:
+#           client-id: ${{ env.ARM_CLIENT_ID }}
+#           tenant-id: ${{ env.ARM_TENANT_ID }}
+#           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+#       - uses: azure/arm-deploy@v2
+#         name: Deploy Main Environment
+#         with:
+#           scope: subscription
+#           region: ${{ env.LOCATION }}
+#           subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
+#           template: ${{ env.BICEP_FILE }}
+#           parameters: ${{ env.PARAMETER_FILE }}
