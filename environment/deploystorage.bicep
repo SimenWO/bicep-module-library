@@ -27,7 +27,6 @@ param avdSessionHostLocation string = 'westeurope'
 param avdUseCustomNaming bool = false
 param avdCustomScriptsRgCustomName string = ''
 param enableCustomScripts bool = false
-param location string
 param tags object = {}
 
 
@@ -52,7 +51,7 @@ module customScriptsResourceGroup 'br/public:avm/res/resources/resource-group:0.
     name: 'CustomScriptsStorage-RG-${time}'
     params: {
       name: varCustomScriptsRgName
-      location: location
+      location: avdSessionHostLocation
       tags: tags
     }
   }
@@ -65,7 +64,7 @@ module customScriptsStorageAccount 'br/public:avm/res/storage/storage-account:0.
     scope: resourceGroup('${avdWorkloadSubsId}', '${varCustomScriptsRgName}')
     params: {
       name: varCustomScriptsStorageAccountName
-      location: location
+      location: avdSessionHostLocation
       kind: 'StorageV2'
       skuName: 'Standard_LRS'
       accessTier: 'Hot'
