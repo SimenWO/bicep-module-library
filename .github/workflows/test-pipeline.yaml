@@ -18,8 +18,8 @@ env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   DEPLOYMENT_NAME: 'Deploy-environment-${{ github.run_number }}'
-  STORAGE_BICEP_FILE: 'environment/deploystorage.bicep'
-  STORAGE_BICEP_FILE_PARAM: 'environment/deploystorage.bicepparam'
+  STORAGE_BICEP_FILE: './environment/deploystorage.bicep'
+  STORAGE_BICEP_FILE_PARAM: './environment/deploystorage.bicepparam'
 
 jobs:
 #   LintValidate:
