@@ -66,8 +66,8 @@ jobs:
           scope: subscription
           region: ${{ env.LOCATION }}
           subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
-          template: ${{ env.STORAGE_BICEP_FILE }}
-          parameters: ${{ env.STORAGE_BICEP_FILE_PARAM }}
+          template: './environment/deploystorage.bicep'
+          parameters: './environment/deploystorage.bicepparam'
 
       - name: Upload files to Storage Account
         run: |
