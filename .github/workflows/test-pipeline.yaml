@@ -1,11 +1,11 @@
 name: Deploy Environment - TEMPLATE_PLACEHOLDER
 
-on:
-  push:
-    branches:
-    - main
-    paths:
-    - "deploy/environment/deploy.bicepparam"
+on: workflow_dispatch
+#   push:
+#     branches:
+#     - main
+#     paths:
+#     - "deploy/environment/deploy.bicepparam"
 
 permissions:
   id-token: write
