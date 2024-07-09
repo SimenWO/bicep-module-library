@@ -77,6 +77,12 @@ module customScriptsStorageAccount 'br/public:avm/res/storage/storage-account:0.
           }
         ]
       }
+      networkAcls: {
+        defaultAction: 'Allow'
+        ipRules: []
+        virtualNetworkRules: []
+        bypass: 'AzureServices'
+      }
     }
     dependsOn: [
       customScriptsResourceGroup
