@@ -1,4 +1,4 @@
-
+targetScope = 'subscription'
 
 @sys.description('Do not modify, used to set unique value for resource deployment.')
 param time string = utcNow()
