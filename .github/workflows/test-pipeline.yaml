@@ -22,28 +22,7 @@ env:
   STORAGE_BICEP_FILE_PARAM: './environment/deploystorage.bicepparam'
 
 jobs:
-#   LintValidate:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4.1.7
-#       - uses: Azure/cli@v2.0.0
-#         with:
-#           inlineScript: |
-#             echo "Linting Bicep file"
-#             az bicep build --file ${{ env.BICEP_FILE }}
-#         env:
-#           AZURE_CORE_COLLECT_TELEMETRY: 'no'
-#       - uses: Azure/cli@v2.0.0
-#         with:
-#           inlineScript: |
-#             echo "Building and What-If Bicep file"
-#             az bicep build --file ${{ env.BICEP_FILE }}
-#             az deployment sub what-if --location ${{ env.LOCATION }} --template-file ${{ env.BICEP_FILE }} --parameters ${{ env.PARAMETER_FILE }}
-#         env:
-#           AZURE_CORE_COLLECT_TELEMETRY: 'no'
-
   deployAndUpload:
-    # needs: LintValidate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
@@ -76,28 +55,9 @@ jobs:
           subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
           template: './environment/deploystorage.bicep'
           parameters: 'deploymentEnvironment=dev avdWorkloadSubsId=9d4dc425-441e-4724-9154-6ea08c34f756 avdSessionHostLocation=westeurope'
-
+          failOnStdErr: false  
       - name: Upload files to Storage Account
         run: |
           for file in $(ls modules/scripts/*); do
             az storage blob upload --account-name ${{ steps.deploy.outputs.storageAccountName }} --container-name ${{ steps.deploy.outputs.containerName }} --file "$file" --name "$(basename $file)"
           done
-
-#   deploy:
-#     needs: deployAndUpload
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4.1.7
-#       - uses: azure/login@v2.1.1
-#         with:
-#           client-id: ${{ env.ARM_CLIENT_ID }}
-#           tenant-id: ${{ env.ARM_TENANT_ID }}
-#           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
-#       - uses: azure/arm-deploy@v2
-#         name: Deploy Main Environment
-#         with:
-#           scope: subscription
-#           region: ${{ env.LOCATION }}
-#           subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
-#           template: ${{ env.BICEP_FILE }}
-#           parameters: ${{ env.PARAMETER_FILE }}
