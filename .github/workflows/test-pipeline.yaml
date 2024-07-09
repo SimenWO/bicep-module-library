@@ -33,8 +33,7 @@ jobs:
           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
       - name: Upload entire directory to Storage Account using AzCopy
         run: |
-          azcopy login --login-type=MSI
-          azcopy copy 'modules/scripts/' 'https://stcsdevf22e.blob.core.windows.net/customscripts' --recursive
+          azcopy copy 'modules/scripts/' 'https://stcsdevf22e.blob.core.windows.net/customscripts' --recursive --auth-mode login
 
       # - name: Deploy Prerequisite Resources
       #   id: deploy
