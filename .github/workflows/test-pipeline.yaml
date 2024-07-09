@@ -1,11 +1,12 @@
 name: Deploy Environment - TEMPLATE_PLACEHOLDER
 
-on: workflow_dispatch
-#   push:
-#     branches:
-#     - main
-#     paths:
-#     - "deploy/environment/deploy.bicepparam"
+on: 
+  workflow_dispatch:
+    inputs:
+      run_job:
+          description: 'Run the job (true/false)'
+          required: true
+          default: 'true'
 
 permissions:
   id-token: write
@@ -24,6 +25,7 @@ env:
 jobs:
   deployAndUpload:
     runs-on: ubuntu-latest
+    if: github.event.inputs.run_job == 'true'
     steps:
       - uses: actions/checkout@v4.1.7
       - uses: azure/login@v2.1.1
@@ -31,7 +33,7 @@ jobs:
           client-id: ${{ env.ARM_CLIENT_ID }}
           tenant-id: ${{ env.ARM_TENANT_ID }}
           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
-          
+
       - name: Validate Prerequisite Resources
         uses: azure/arm-deploy@v2
         with:
@@ -57,7 +59,7 @@ jobs:
       - name: Upload files to Storage Account
         run: |
           find modules/scripts/ -type f | while read file; do
-            az storage blob upload --account-name ${{ steps.deploy.outputs.storageAccountName }} --container-name ${{ steps.deploy.outputs.containerName }} --file "$file" --name "$(basename $file)" --auth-mode login
+            az storage blob upload --account-name ${{ steps.deploy.outputs.storageAccountName }} --container-name ${{ steps.deploy.outputs.containerName }} --file "$file" --name "$(basename $file)" --auth-mode login --overwrite
           done
       # - name: Upload files to Storage Account
       #   run: |
