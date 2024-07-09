@@ -78,6 +78,9 @@ module customScriptsStorageAccount 'br/public:avm/res/storage/storage-account:0.
         ]
       }
     }
+    dependsOn: [
+      customScriptsResourceGroup
+    ]
   }
 
 output storageAccountName string = customScriptsStorageAccount.outputs.name
