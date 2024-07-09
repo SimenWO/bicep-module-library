@@ -45,7 +45,7 @@ jobs:
       - name: Upload files to Storage Account
         run: |
           find modules/scripts/ -type f | while read file; do
-            az storage blob upload --account-name ${{ steps.deploy.outputs.storageAccountName }} --container-name ${{ steps.deploy.outputs.containerName }} --file "$file" --name "${basename $file}" --auth-mode login
+            az storage blob upload --account-name ${{ steps.deploy.outputs.storageAccountName }} --container-name ${{ steps.deploy.outputs.containerName }} --file "$file" --name "$(basename $file)" --auth-mode login
           done
       # - name: Upload files to Storage Account
       #   run: |
