@@ -6,3 +6,5 @@ param avdWorkloadSubsId = '9d4dc425-441e-4724-9154-6ea08c34f756'
 
 @sys.description('Location where to deploy compute services. (Default: eastus2)')
 param avdSessionHostLocation = 'westeurope'
+
+param enableCustomScripts = true
