@@ -39,13 +39,13 @@ jobs:
           region: ${{ env.LOCATION }}
           subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
           template: './environment/deploystorage.bicep'
-          parameters: 'deploymentEnvironment=Dev avdWorkloadSubsId=9d4dc425-441e-4724-9154-6ea08c34f756 avdSessionHostLocation=westeurope enableCustomScripts=true'
+          parameters: './environment/deploystorage.bicepparam'
           failOnStdErr: false  
 
       - name: Upload files to Storage Account
         run: |
           find modules/scripts/ -type f | while read file; do
-            az storage blob upload --account-name ${{ steps.deploy.outputs.storageAccountName }} --container-name ${{ steps.deploy.outputs.containerName }} --file "$file" --name "${file#modules/scripts/}" --auth-mode login
+            az storage blob upload --account-name ${{ steps.deploy.outputs.storageAccountName }} --container-name ${{ steps.deploy.outputs.containerName }} --file "$file" --name "${basename $file}" --auth-mode login
           done
       # - name: Upload files to Storage Account
       #   run: |
