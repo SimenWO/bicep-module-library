@@ -31,16 +31,16 @@ jobs:
           client-id: ${{ env.ARM_CLIENT_ID }}
           tenant-id: ${{ env.ARM_TENANT_ID }}
           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
-      # - name: Deploy Prerequisite Resources
-      #   id: deploy
-      #   uses: azure/arm-deploy@v2
-      #   with:
-      #     scope: subscription
-      #     region: ${{ env.LOCATION }}
-      #     subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
-      #     template: './environment/deploystorage.bicep'
-      #     parameters: 'deploymentEnvironment=Dev avdWorkloadSubsId=9d4dc425-441e-4724-9154-6ea08c34f756 avdSessionHostLocation=westeurope enableCustomScripts=true'
-      #     failOnStdErr: false  
+      - name: Deploy Prerequisite Resources
+        id: deploy
+        uses: azure/arm-deploy@v2
+        with:
+          scope: subscription
+          region: ${{ env.LOCATION }}
+          subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
+          template: './environment/deploystorage.bicep'
+          parameters: 'deploymentEnvironment=Dev avdWorkloadSubsId=9d4dc425-441e-4724-9154-6ea08c34f756 avdSessionHostLocation=westeurope enableCustomScripts=true'
+          failOnStdErr: false  
 
       - name: Upload files to Storage Account
         run: |
