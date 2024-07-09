@@ -16,6 +16,7 @@ param deploymentPrefix string = 'AVD1'
 @sys.description('The name of the resource group to deploy. (Default: Dev)')
 param deploymentEnvironment string = 'Dev'
 
+@sys.description('The subscription ID where the resources will be deployed.')
 param avdWorkloadSubsId string 
 
 @sys.description('Location where to deploy compute services. (Default: eastus2)')
@@ -23,13 +24,21 @@ param avdSessionHostLocation string = 'westeurope'
 
 
 
-// Create a Storage Account for custom scripts
+// Parameters for Storage Account and custom scripts
+@sys.description('Use custom naming for the custom scripts resource group.')
 param avdUseCustomNaming bool = false
+
+@sys.description('The name of the custom scripts resource group.')
 param avdCustomScriptsRgCustomName string = ''
+
+@sys.description('Enable custom scripts.')
 param enableCustomScripts bool = false
+
+@sys.description('Tags to apply to the resources.')
 param tags object = {}
 
 
+// Variables
 var varDeploymentPrefixLowercase = toLower(deploymentPrefix)
 var varDeploymentEnvironmentLowercase = toLower(deploymentEnvironment)
 var varLocations = loadJsonContent('../modules/variables/locations.json')
