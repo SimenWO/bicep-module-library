@@ -44,7 +44,7 @@ jobs:
           inlineScript: |
             echo "Building and What-If Bicep file"
             az bicep build --file ${{ env.STORAGE_BICEP_FILE }}
-            az deployment sub what-if --location ${{ env.LOCATION }} --template-file ${{ env.STORAGE_BICEP_FILE }} --parameters ${{ env.STORAGE_FILE_PARAM }}
+            az deployment sub what-if --location ${{ env.LOCATION }} --template-file ${{ env.STORAGE_BICEP_FILE }} --parameters ${{ env.STORAGE_BICEP_FILE_PARAM }}
         env:
           AZURE_CORE_COLLECT_TELEMETRY: 'no'
 
