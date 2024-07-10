@@ -58,6 +58,20 @@ jobs:
           client-id: ${{ env.ARM_CLIENT_ID }}
           tenant-id: ${{ env.ARM_TENANT_ID }}
           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
+      
+      - name: Fetch parameters
+        id: fetchParams
+        run: |
+          $parametersJson = (bicep build-params ${{ env.STORAGE_BICEP_FILE_PARAM }} --stdout | ConvertFrom-Json).parametersJson | ConvertFrom-Json
+          $deployEnvironment = $parametersJson.parameters.deploymentEnvironment.value
+          $avdWorkloadSubsId = $parametersJson.parameters.avdWorkloadSubsId.value
+          $avdSessionHostLocation = $parametersJson.parameters.avdSessionHostLocation.value
+          $enableCustomScripts = $parametersJson.parameters.enableCustomScripts.value
+
+          echo "::set-output name=deployEnvironment::$deployEnvironment"
+          echo "::set-output name=avdWorkloadSubsId::$avdWorkloadSubsId"
+          echo "::set-output name=avdSessionHostLocation::$avdSessionHostLocation"
+          echo "::set-output name=enableCustomScripts::$enableCustomScripts"
 
       - name: Validate Prerequisite Resources
         uses: azure/arm-deploy@v2
@@ -66,7 +80,11 @@ jobs:
           region: ${{ env.LOCATION }}
           subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
           template: './environment/deploystorage.bicep'
-          parameters: './environment/deploystorage.bicepparam'
+          parameters: >
+            deploymentEnvironment=${{ steps.fetchParams.outputs.deployEnvironment }}
+            avdWorkloadSubsId=${{ steps.fetchParams.outputs.avdWorkloadSubsId }}
+            avdSessionHostLocation=${{ steps.fetchParams.outputs.avdSessionHostLocation }}
+            enableCustomScripts=${{ steps.fetchParams.outputs.enableCustomScripts }}
           failOnStdErr: false
           deploymentMode: Validate  
 
@@ -78,7 +96,11 @@ jobs:
           region: ${{ env.LOCATION }}
           subscriptionId: ${{ env.ARM_SUBSCRIPTION_ID }}
           template: './environment/deploystorage.bicep'
-          parameters: './environment/deploystorage.bicepparam'
+          parameters: >
+            deploymentEnvironment=${{ steps.fetchParams.outputs.deployEnvironment }}
+            avdWorkloadSubsId=${{ steps.fetchParams.outputs.avdWorkloadSubsId }}
+            avdSessionHostLocation=${{ steps.fetchParams.outputs.avdSessionHostLocation }}
+            enableCustomScripts=${{ steps.fetchParams.outputs.enableCustomScripts }}
           failOnStdErr: false  
 
       - name: Upload files to Storage Account
