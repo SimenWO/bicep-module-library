@@ -69,10 +69,10 @@ jobs:
           $avdSessionHostLocation = $parametersJson.parameters.avdSessionHostLocation.value
           $enableCustomScripts = $parametersJson.parameters.enableCustomScripts.value
 
-          "deployEnvironment::$deployEnvironment" >> $env:GITHUB_OUTPUT
-          "avdWorkloadSubsId::$avdWorkloadSubsId" >> $env:GITHUB_OUTPUT
-          "avdSessionHostLocation::$avdSessionHostLocation" >> $env:GITHUB_OUTPUT
-          "enableCustomScripts::$enableCustomScripts" >> $env:GITHUB_OUTPUT
+          echo "deployEnvironment::$deployEnvironment" >> $env:GITHUB_OUTPUT
+          echo "avdWorkloadSubsId::$avdWorkloadSubsId" >> $env:GITHUB_OUTPUT
+          echo "avdSessionHostLocation::$avdSessionHostLocation" >> $env:GITHUB_OUTPUT
+          echo "enableCustomScripts::$enableCustomScripts" >> $env:GITHUB_OUTPUT
 
       - name: Validate Prerequisite Resources
         uses: azure/arm-deploy@v2
