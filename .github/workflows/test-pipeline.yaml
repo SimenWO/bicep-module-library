@@ -61,6 +61,7 @@ jobs:
       
       - name: Fetch parameters
         id: fetchParams
+        shell: pwsh
         run: |
           $parametersJson = (bicep build-params ${{ env.STORAGE_BICEP_FILE_PARAM }} --stdout | ConvertFrom-Json).parametersJson | ConvertFrom-Json
           $deployEnvironment = $parametersJson.parameters.deploymentEnvironment.value
